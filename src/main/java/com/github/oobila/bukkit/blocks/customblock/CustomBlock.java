@@ -5,7 +5,6 @@ import com.github.oobila.bukkit.common.utils.model.ColoredMaterialType;
 import com.github.oobila.bukkit.itemstack.PersistentMetaUtil;
 import lombok.Getter;
 import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -18,12 +17,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import static com.github.oobila.bukkit.common.ABCommon.key;
 import static com.github.oobila.bukkit.common.ABCommon.runTaskLater;
 
 public abstract class CustomBlock implements CustomBlockOperations {
 
     private static final String CUSTOM_BLOCK_ID = "custom_block_id";
-    private static NamespacedKey namespacedKey;
 
     private static final Map<UUID, CustomBlock> registeredBlocks = new HashMap<>();
 
@@ -35,18 +34,14 @@ public abstract class CustomBlock implements CustomBlockOperations {
     private final UUID customBlockId;
     final DisplayItemConfig config;
 
-    public static void setupNamespace(Plugin plugin) {
-        namespacedKey = new NamespacedKey(plugin, CUSTOM_BLOCK_ID);
-    }
-
-    public CustomBlock(Plugin plugin, String name, DisplayItemConfig config) {
+    protected CustomBlock(Plugin plugin, String name, DisplayItemConfig config) {
         this.plugin = plugin;
         this.name = name;
         this.config = config;
 
         ItemMeta itemMeta = this.config.getItemStack().getItemMeta();
         this.customBlockId = UUID.nameUUIDFromBytes((plugin.getName() + name).getBytes());
-        PersistentMetaUtil.add(itemMeta, namespacedKey, customBlockId);
+        PersistentMetaUtil.add(itemMeta, key(CUSTOM_BLOCK_ID), customBlockId);
         this.config.getItemStack().setItemMeta(itemMeta);
 
         if (!MaterialUtil.isColoredBlock(ColoredMaterialType.STAINED_GLASS, config.getGlassMaterial())) {
@@ -58,14 +53,14 @@ public abstract class CustomBlock implements CustomBlockOperations {
 
     public void blockPlace(Player player, Location location) {
         Set<Display> displays = placeDisplays(player, location);
-        displays.forEach(display -> PersistentMetaUtil.add(display, namespacedKey, customBlockId));
+        displays.forEach(display -> PersistentMetaUtil.add(display, key(CUSTOM_BLOCK_ID), customBlockId));
         runTaskLater(() -> location.getWorld().getBlockAt(location).setType(config.getGlassMaterial()), 1);
     }
 
-    public void blockBreak(Player player, Location location) {
+    public void blockBreak(Location location) {
         for (Entity entity : location.getWorld().getNearbyEntities(location.getBlock().getBoundingBox())) {
             if (entity instanceof Display display) {
-                UUID id = PersistentMetaUtil.getUUID(display, namespacedKey);
+                UUID id = PersistentMetaUtil.getUUID(display, key(CUSTOM_BLOCK_ID));
                 if (id.equals(customBlockId)) {
                     entity.remove();
                 }
@@ -90,13 +85,13 @@ public abstract class CustomBlock implements CustomBlockOperations {
     }
 
     public static boolean isCustomBlock(ItemStack itemInHand) {
-        return PersistentMetaUtil.containsKey(itemInHand.getItemMeta(), namespacedKey);
+        return PersistentMetaUtil.containsKey(itemInHand.getItemMeta(), key(CUSTOM_BLOCK_ID));
     }
 
     private static boolean containsCustomBlockEntity(Location location) {
         for (Entity entity : location.getWorld().getNearbyEntities(location.getBlock().getBoundingBox())) {
             if (entity instanceof Display display) {
-                return PersistentMetaUtil.containsKey(display, namespacedKey);
+                return PersistentMetaUtil.containsKey(display, key(CUSTOM_BLOCK_ID));
             }
         }
         return false;
@@ -109,7 +104,7 @@ public abstract class CustomBlock implements CustomBlockOperations {
 
         for (Entity entity : location.getWorld().getNearbyEntities(location.getBlock().getBoundingBox())) {
             if (entity instanceof Display display) {
-                UUID customBlockId = PersistentMetaUtil.getUUID(display, namespacedKey);
+                UUID customBlockId = PersistentMetaUtil.getUUID(display, key(CUSTOM_BLOCK_ID));
                 return registeredBlocks.get(customBlockId);
             }
         }
@@ -117,7 +112,7 @@ public abstract class CustomBlock implements CustomBlockOperations {
     }
 
     public static CustomBlock getCustomBlock(ItemStack itemInHand) {
-        UUID id = PersistentMetaUtil.getUUID(itemInHand.getItemMeta(), namespacedKey);
+        UUID id = PersistentMetaUtil.getUUID(itemInHand.getItemMeta(), key(CUSTOM_BLOCK_ID));
         return registeredBlocks.get(id);
     }
 }

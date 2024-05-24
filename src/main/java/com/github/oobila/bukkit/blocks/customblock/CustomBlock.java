@@ -57,7 +57,7 @@ public abstract class CustomBlock implements CustomBlockOperations {
         runTaskLater(() -> location.getWorld().getBlockAt(location).setType(config.getGlassMaterial()), 1);
     }
 
-    public void blockBreak(Location location) {
+    public void blockBreak(Player player, Location location) {
         for (Entity entity : location.getWorld().getNearbyEntities(location.getBlock().getBoundingBox())) {
             if (entity instanceof Display display) {
                 UUID id = PersistentMetaUtil.getUUID(display, key(CUSTOM_BLOCK_ID));

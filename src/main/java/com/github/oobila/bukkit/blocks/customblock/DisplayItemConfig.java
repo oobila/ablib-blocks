@@ -20,6 +20,7 @@ public class DisplayItemConfig {
     private Color glowColor;
     private boolean isBright;
     private boolean billboard;
+    private float viewRange = 0.1F;
 
     private void setItemStack(ItemStack itemStack) {
         this.itemStack = itemStack.clone();

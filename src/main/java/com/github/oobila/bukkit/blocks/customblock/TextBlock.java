@@ -41,7 +41,7 @@ public abstract class TextBlock extends CustomBlock {
         int rows = StringUtils.countMatches(text, "\n") + 1;
         textDisplay.teleport(textLocation.add(0, -(rows * 0.15 * widthScale), 0));
         textDisplay.setTransformation(transformation);
-        textDisplay.setViewRange(.1f);
+        textDisplay.setViewRange(config.getViewRange());
         textDisplay.setBillboard(Display.Billboard.CENTER);
         if (config.isBright()) {
             textDisplay.setBrightness(new Display.Brightness(15, 15));

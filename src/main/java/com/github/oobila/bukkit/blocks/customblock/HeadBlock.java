@@ -32,7 +32,7 @@ public abstract class HeadBlock extends CustomBlock {
                 EntityType.ITEM_DISPLAY
         );
         itemDisplay.setItemStack(head);
-        itemDisplay.setViewRange(.2f);
+        itemDisplay.setViewRange(config.getViewRange());
         if (config.isGlowing()) {
             itemDisplay.setGlowing(true);
             if (config.getGlowColor() != null) {

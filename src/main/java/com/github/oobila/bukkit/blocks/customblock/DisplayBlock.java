@@ -15,17 +15,25 @@ public abstract class DisplayBlock extends CustomBlock {
 
     private final ItemStack head;
     private final String text;
+    private final DisplayItemConfig textConfig;
+    private final DisplayItemConfig headConfig;
 
     public DisplayBlock(Plugin plugin, String name, DisplayItemConfig config, ItemStack head, String text) {
-        super(plugin, name, config);
+        this (plugin, name, config, config, head, text);
+    }
+
+    public DisplayBlock(Plugin plugin, String name, DisplayItemConfig textConfig, DisplayItemConfig headConfig, ItemStack head, String text) {
+        super(plugin, name, headConfig);
         this.head = head;
         this.text = text;
+        this.textConfig = textConfig;
+        this.headConfig = headConfig;
     }
 
     @Override
     public Set<Display> placeDisplays(Player player, Location location) {
-        TextDisplay textDisplay = TextBlock.getTextDisplay(config, text, location.clone().add(0, 0.1, 0));
-        ItemDisplay headDisplay = HeadBlock.getHeadDisplay(config, head, player,
+        TextDisplay textDisplay = TextBlock.getTextDisplay(textConfig, text, location.clone().add(0, 0.1, 0));
+        ItemDisplay headDisplay = HeadBlock.getHeadDisplay(headConfig, head, player,
                 location.clone().add(0, -0.3, 0));
         Transformation transformation = headDisplay.getTransformation();
         transformation.getScale().set(0.6d);

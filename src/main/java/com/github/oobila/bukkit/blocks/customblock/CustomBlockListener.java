@@ -20,18 +20,20 @@ public class CustomBlockListener implements Listener {
         }
         e.setCancelled(true);
         CustomBlock customBlock = CustomBlock.getCustomBlock(e.getItemInHand());
-        if (!e.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
-            if (e.getHand().equals(EquipmentSlot.HAND)) {
-                e.getPlayer().getInventory().getItemInMainHand().setAmount(
-                        e.getPlayer().getInventory().getItemInMainHand().getAmount() - 1
-                );
-            } else if (e.getHand().equals(EquipmentSlot.OFF_HAND)) {
-                e.getPlayer().getInventory().getItemInOffHand().setAmount(
-                        e.getPlayer().getInventory().getItemInOffHand().getAmount() - 1
-                );
+        if (customBlock != null) { //this could be null if the block belongs to another plugin
+            if (!e.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
+                if (e.getHand().equals(EquipmentSlot.HAND)) {
+                    e.getPlayer().getInventory().getItemInMainHand().setAmount(
+                            e.getPlayer().getInventory().getItemInMainHand().getAmount() - 1
+                    );
+                } else if (e.getHand().equals(EquipmentSlot.OFF_HAND)) {
+                    e.getPlayer().getInventory().getItemInOffHand().setAmount(
+                            e.getPlayer().getInventory().getItemInOffHand().getAmount() - 1
+                    );
+                }
             }
+            customBlock.blockPlace(e.getPlayer(), e.getBlockPlaced().getLocation());
         }
-        customBlock.blockPlace(e.getPlayer(), e.getBlockPlaced().getLocation());
     }
 
     @EventHandler
@@ -40,10 +42,12 @@ public class CustomBlockListener implements Listener {
             return;
         }
         CustomBlock customBlock = CustomBlock.getCustomBlock(e.getBlock().getLocation());
-        if (!e.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
-            e.getBlock().getWorld().dropItem(e.getBlock().getLocation().add(0.5, 0.5, 0.5), customBlock.getItemStack());
+        if (customBlock != null) { //this could be null if the block belongs to another plugin
+            if (!e.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
+                e.getBlock().getWorld().dropItem(e.getBlock().getLocation().add(0.5, 0.5, 0.5), customBlock.getItemStack());
+            }
+            customBlock.blockBreak(e.getPlayer(), e.getBlock().getLocation());
         }
-        customBlock.blockBreak(e.getPlayer(), e.getBlock().getLocation());
     }
 
     @EventHandler

@@ -8,13 +8,15 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import static com.github.oobila.bukkit.itemstack.ItemStackProxy.skull;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class DisplayItemConfig {
+public class HeadItemConfig {
 
-    private ItemStack itemStack;
+    private String headTexture;
     private Material blockMaterial;
     private boolean isGlowing;
     private Color glowColor;
@@ -22,8 +24,15 @@ public class DisplayItemConfig {
     private boolean billboard;
     private float viewRange = 0.1F;
 
-    public void setItemStack(ItemStack itemStack) {
-        this.itemStack = itemStack.clone();
+    public DisplayItemConfig toDisplayItemConfig() {
+        return new DisplayItemConfig(
+                skull(headTexture).getItemStack(),
+                blockMaterial,
+                isGlowing,
+                glowColor,
+                isBright,
+                billboard,
+                0.1F
+        );
     }
-
 }

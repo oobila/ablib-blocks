@@ -1,8 +1,7 @@
 package com.github.oobila.bukkit.blocks.customblock;
 
-import com.github.oobila.bukkit.common.utils.MaterialUtil;
-import com.github.oobila.bukkit.common.utils.model.ColoredMaterialType;
 import com.github.oobila.bukkit.itemstack.PersistentMetaUtil;
+import lombok.AccessLevel;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.entity.Display;
@@ -32,7 +31,8 @@ public abstract class CustomBlock implements CustomBlockOperations {
     private final String name;
     @Getter
     private final UUID customBlockId;
-    final DisplayItemConfig config;
+    @Getter(AccessLevel.PROTECTED)
+    private final DisplayItemConfig config;
 
     protected CustomBlock(Plugin plugin, String name, DisplayItemConfig config) {
         this.plugin = plugin;
@@ -44,17 +44,13 @@ public abstract class CustomBlock implements CustomBlockOperations {
         PersistentMetaUtil.add(itemMeta, key(CUSTOM_BLOCK_ID), customBlockId);
         this.config.getItemStack().setItemMeta(itemMeta);
 
-        if (!MaterialUtil.isColoredBlock(ColoredMaterialType.STAINED_GLASS, config.getGlassMaterial())) {
-            throw new RuntimeException("CustomBlock attempted to be created with non stained-glass material: " + config.getGlassMaterial().name());
-        }
-
         registeredBlocks.put(customBlockId, this);
     }
 
     public void blockPlace(Player player, Location location) {
         Set<Display> displays = placeDisplays(player, location);
         displays.forEach(display -> PersistentMetaUtil.add(display, key(CUSTOM_BLOCK_ID), customBlockId));
-        runTaskLater(() -> location.getWorld().getBlockAt(location).setType(config.getGlassMaterial()), 1);
+        runTaskLater(() -> location.getWorld().getBlockAt(location).setType(config.getBlockMaterial()), 1);
     }
 
     public void blockBreak(Player player, Location location) {
@@ -73,22 +69,6 @@ public abstract class CustomBlock implements CustomBlockOperations {
     }
 
     public static boolean isCustomBlock(Location location) {
-        if (!MaterialUtil.isColoredBlock(ColoredMaterialType.STAINED_GLASS, location.getBlock().getType())) {
-            return false; //is not stained glass block
-        }
-
-        if (!containsCustomBlockEntity(location)) {
-            return false; //does not contain custom block entity
-        }
-
-        return true;
-    }
-
-    public static boolean isCustomBlock(ItemStack itemInHand) {
-        return PersistentMetaUtil.containsKey(itemInHand.getItemMeta(), key(CUSTOM_BLOCK_ID));
-    }
-
-    private static boolean containsCustomBlockEntity(Location location) {
         for (Entity entity : location.getWorld().getNearbyEntities(location.getBlock().getBoundingBox())) {
             if (entity instanceof Display display) {
                 return PersistentMetaUtil.containsKey(display, key(CUSTOM_BLOCK_ID));
@@ -97,11 +77,11 @@ public abstract class CustomBlock implements CustomBlockOperations {
         return false;
     }
 
-    public static CustomBlock getCustomBlock(Location location) {
-        if (!MaterialUtil.isColoredBlock(ColoredMaterialType.STAINED_GLASS, location.getBlock().getType())) {
-            return null; //is not stained glass block
-        }
+    public static boolean isCustomBlock(ItemStack itemInHand) {
+        return PersistentMetaUtil.containsKey(itemInHand.getItemMeta(), key(CUSTOM_BLOCK_ID));
+    }
 
+    public static CustomBlock getCustomBlock(Location location) {
         for (Entity entity : location.getWorld().getNearbyEntities(location.getBlock().getBoundingBox())) {
             if (entity instanceof Display display) {
                 UUID customBlockId = PersistentMetaUtil.getUUID(display, key(CUSTOM_BLOCK_ID));

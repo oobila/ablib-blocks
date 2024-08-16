@@ -18,8 +18,8 @@ public abstract class HeadBlock extends CustomBlock {
 
     private final ItemStack head;
 
-    public HeadBlock(Plugin plugin, String name, HeadItemConfig config, ItemStack head) {
-        super(plugin, name, config.toDisplayItemConfig());
+    public HeadBlock(Plugin plugin, String name, DisplayItemConfig config, ItemStack head) {
+        super(plugin, name, config);
         this.head = head;
         if (!MaterialUtil.isColoredBlock(ColoredMaterialType.STAINED_GLASS, config.getBlockMaterial())) {
             throw new RuntimeException("CustomBlock attempted to be created with non stained-glass material: " + config.getBlockMaterial().name());

@@ -13,8 +13,8 @@ public class StickerBlock extends CustomBlock {
 
     private final ItemStack head;
 
-    public StickerBlock(Plugin plugin, String name, HeadItemConfig config, ItemStack head) {
-        super(plugin, name, config.toDisplayItemConfig());
+    public StickerBlock(Plugin plugin, String name, DisplayItemConfig config, ItemStack head) {
+        super(plugin, name, config);
         this.head = head;
     }
 

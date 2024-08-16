@@ -16,9 +16,11 @@ import java.util.Set;
 
 public abstract class HeadBlock extends CustomBlock {
 
-    public HeadBlock(Plugin plugin, String name, HeadItemConfig config) {
-        super(plugin, name, config.toDisplayItemConfig());
+    private final ItemStack head;
 
+    public HeadBlock(Plugin plugin, String name, HeadItemConfig config, ItemStack head) {
+        super(plugin, name, config.toDisplayItemConfig());
+        this.head = head;
         if (!MaterialUtil.isColoredBlock(ColoredMaterialType.STAINED_GLASS, config.getBlockMaterial())) {
             throw new RuntimeException("CustomBlock attempted to be created with non stained-glass material: " + config.getBlockMaterial().name());
         }
@@ -26,11 +28,11 @@ public abstract class HeadBlock extends CustomBlock {
 
     @Override
     public Set<Display> placeDisplays(Player player, Location location) {
-        ItemDisplay itemDisplay = getHeadDisplay(getConfig(), player, location, 1);
+        ItemDisplay itemDisplay = getHeadDisplay(getConfig(), head, player, location, 1);
         return Set.of(itemDisplay);
     }
 
-    static ItemDisplay getHeadDisplay(DisplayItemConfig config, Player player, Location location, double scale){
+    static ItemDisplay getHeadDisplay(DisplayItemConfig config, ItemStack head, Player player, Location location, double scale){
         if (scale >= 1.5) {
             scale = 1.49d;
         }
@@ -39,7 +41,7 @@ public abstract class HeadBlock extends CustomBlock {
                 location.clone().add(0.5, 0.5 - (scale / 2), 0.5),
                 EntityType.ITEM_DISPLAY
         );
-        itemDisplay.setItemStack(config.getItemStack());
+        itemDisplay.setItemStack(head);
         itemDisplay.setViewRange(config.getViewRange());
         if (config.isGlowing()) {
             itemDisplay.setGlowing(true);

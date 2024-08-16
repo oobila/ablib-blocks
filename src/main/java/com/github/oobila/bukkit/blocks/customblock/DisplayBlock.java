@@ -13,6 +13,7 @@ import java.util.Set;
 public abstract class DisplayBlock extends CustomBlock {
 
     private final String text;
+    private final ItemStack head;
     private final DisplayItemConfig textConfig;
     private final DisplayItemConfig headConfig;
 
@@ -23,6 +24,7 @@ public abstract class DisplayBlock extends CustomBlock {
     public DisplayBlock(Plugin plugin, String name, DisplayItemConfig textConfig, DisplayItemConfig headConfig, ItemStack head, String text) {
         super(plugin, name, headConfig);
         this.text = text;
+        this.head = head;
         this.textConfig = textConfig;
         this.headConfig = headConfig;
     }
@@ -36,6 +38,7 @@ public abstract class DisplayBlock extends CustomBlock {
         );
         ItemDisplay headDisplay = HeadBlock.getHeadDisplay(
                 headConfig,
+                head,
                 player,
                 location.clone().add(0, -0.3, 0),
                 0.6d

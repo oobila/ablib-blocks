@@ -20,7 +20,7 @@ public class StickerBlock extends CustomBlock {
 
     @Override
     public Set<Display> placeDisplays(Player player, Location location) {
-        ItemDisplay itemDisplay = HeadBlock.getHeadDisplay(getConfig(), head, player, location, 1.4);
+        ItemDisplay itemDisplay = HeadBlock.getHeadDisplay(getConfig(), head, player, location, 2);
         return Set.of(itemDisplay);
     }
 }

@@ -38,7 +38,7 @@ public abstract class HeadBlock extends CustomBlock {
         }
 
         ItemDisplay itemDisplay = (ItemDisplay) location.getWorld().spawnEntity(
-                location.clone().add(0.5, 0.5 - (scale / 2), 0.5),
+                location.clone().add(0.5, 1 - (scale / 2), 0.5),
                 EntityType.ITEM_DISPLAY
         );
         itemDisplay.setItemStack(head);

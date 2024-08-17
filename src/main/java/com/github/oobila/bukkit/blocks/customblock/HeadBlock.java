@@ -38,7 +38,7 @@ public abstract class HeadBlock extends CustomBlock {
         }
 
         ItemDisplay itemDisplay = (ItemDisplay) location.getWorld().spawnEntity(
-                location.clone().add(0.5, 1 - (scale / 2), 0.5),
+                location.clone().add(0.5, 1 - (scale / 4), 0.5), //dividing by 4 as the head is 0.5 blocks tall
                 EntityType.ITEM_DISPLAY
         );
         itemDisplay.setItemStack(head);

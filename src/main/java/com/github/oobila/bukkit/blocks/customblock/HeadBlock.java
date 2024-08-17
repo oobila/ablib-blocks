@@ -33,7 +33,9 @@ public abstract class HeadBlock extends CustomBlock {
     }
 
     static ItemDisplay getHeadDisplay(DisplayItemConfig config, ItemStack head, Player player, Location location, double scale){
-        if (scale >= 2) {
+        if (scale > 5.7 && scale <= 6) {
+            scale = 5.7d;
+        } else if (scale >= 2) {
             scale = 1.90d;
         }
 

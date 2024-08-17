@@ -21,9 +21,6 @@ public abstract class HeadBlock extends CustomBlock {
     public HeadBlock(Plugin plugin, String name, DisplayItemConfig config, ItemStack head) {
         super(plugin, name, config);
         this.head = head;
-        if (!MaterialUtil.isColoredBlock(ColoredMaterialType.STAINED_GLASS, config.getBlockMaterial())) {
-            throw new RuntimeException("CustomBlock attempted to be created with non stained-glass material: " + config.getBlockMaterial().name());
-        }
     }
 
     @Override
@@ -36,7 +33,7 @@ public abstract class HeadBlock extends CustomBlock {
         double yOffset;
         if (scale > 5.7 && scale <= 6) {
             scale = 5.7d;
-            yOffset = 0.95;
+            yOffset = 0.925;
         } else if (scale >= 2) {
             scale = 1.90d;
             yOffset = 0.5 + (scale / 4);

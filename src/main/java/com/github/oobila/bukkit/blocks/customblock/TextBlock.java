@@ -22,10 +22,6 @@ public abstract class TextBlock extends CustomBlock {
         super(plugin, name, config);
         int rows = StringUtils.countMatches(text, "\n") + 1;
         this.text = rows > 10 ? "ERROR\nThere are too\nmany rows!!" : text;
-
-        if (!MaterialUtil.isColoredBlock(ColoredMaterialType.STAINED_GLASS, config.getBlockMaterial())) {
-            throw new RuntimeException("CustomBlock attempted to be created with non stained-glass material: " + config.getBlockMaterial().name());
-        }
     }
 
     @Override

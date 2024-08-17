@@ -1,5 +1,7 @@
 package com.github.oobila.bukkit.blocks.customblock;
 
+import com.github.oobila.bukkit.common.utils.MaterialUtil;
+import com.github.oobila.bukkit.common.utils.model.ColoredMaterialType;
 import com.github.oobila.bukkit.itemstack.PersistentMetaUtil;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -38,6 +40,10 @@ public abstract class CustomBlock implements CustomBlockOperations {
         this.plugin = plugin;
         this.name = name;
         this.config = config;
+
+        if (config.getBlockMaterial().isOccluding()) {
+            throw new RuntimeException("CustomBlock attempted to be created with occluding material: " + config.getBlockMaterial().name());
+        }
 
         ItemMeta itemMeta = this.config.getItemStack().getItemMeta();
         this.customBlockId = UUID.nameUUIDFromBytes((plugin.getName() + name).getBytes());

@@ -26,4 +26,10 @@ public class DisplayItemConfig {
         this.itemStack = itemStack.clone();
     }
 
+    public static class DisplayItemConfigBuilder {
+        private Material blockMaterial = Material.GLASS;
+        private Color glowColor = Color.WHITE;
+        private float viewRange = 0.1F;
+    }
+
 }

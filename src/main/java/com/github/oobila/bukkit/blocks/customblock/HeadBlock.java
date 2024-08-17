@@ -34,7 +34,7 @@ public abstract class HeadBlock extends CustomBlock {
 
     static ItemDisplay getHeadDisplay(DisplayItemConfig config, ItemStack head, Player player, Location location, double scale){
         if (scale >= 2) {
-            scale = 1.99d;
+            scale = 1.94d;
         }
 
         ItemDisplay itemDisplay = (ItemDisplay) location.getWorld().spawnEntity(

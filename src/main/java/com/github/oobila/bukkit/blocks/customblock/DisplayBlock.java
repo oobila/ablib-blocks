@@ -40,7 +40,7 @@ public abstract class DisplayBlock extends CustomBlock {
                 headConfig,
                 head,
                 player,
-                location.clone().add(0, -0.3, 0),
+                location.clone().add(0, -0.2, 0),
                 0.6d
         );
         return Set.of(textDisplay, headDisplay);
